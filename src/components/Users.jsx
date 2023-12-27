@@ -11,6 +11,10 @@ function Users() {
 
   //atsisiusti userius ir iskonsolinti
   useEffect(() => {
+    getUsers();
+  }, []);
+
+  function getUsers() {
     axios
       .get(`${baseUrl}/users`)
       .then((ats) => {
@@ -20,13 +24,34 @@ function Users() {
       .catch((error) => {
         console.warn("įvyko klaida:", error);
       });
-  }, []);
+  }
+
   // sugeneruoti html
   console.log("usersArr ===", usersArr);
 
   function handleNewUserSubmit(event) {
     event.preventDefault();
-    console.log("js is in control");
+    const newUser = {
+      name: nameVal,
+      town: townVal,
+      isDriver,
+    };
+    axios
+      .post(`${baseUrl}/users`, newUser)
+      .then((ats) => {
+        console.log("ats ===", ats);
+        if (ats.status === 201) {
+          // succes usersi sukurtas
+          // atnaujinti vartotoju srasa
+          getUsers();
+          return;
+        }
+        // nesekme, nepavyko
+        // show error
+      })
+      .catch((error) => {
+        console.warn("įvyko klaida:", error);
+      });
   }
 
   return (
@@ -77,6 +102,8 @@ function Users() {
           <li className="list-group-item" key={uObj.id}>
             (id: {uObj.id}) {uObj.name} yra is {uObj.town} vairuoja:{" "}
             {uObj.isDriver ? "Taip" : "Ne"}
+            <button className="btn btn-danger mx-3">Delete</button>
+            <button className="btn btn-success">Edit</button>
           </li>
         ))}
       </ul>
