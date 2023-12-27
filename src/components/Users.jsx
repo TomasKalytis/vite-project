@@ -24,9 +24,9 @@ function Users() {
   return (
     <div>
       <h2>Users</h2>
-      <ul className="unlisted">
+      <ul className="list-group">
         {usersArr.map((uObj) => (
-          <li key={uObj.id}>
+          <li className="list-group-item" key={uObj.id}>
             (id: {uObj.id}) {uObj.name} yra is {uObj.town} vairuoja:{" "}
             {uObj.isDriver ? "Taip" : "Ne"}
           </li>
